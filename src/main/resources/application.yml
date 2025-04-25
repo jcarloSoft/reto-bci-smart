@@ -8,8 +8,7 @@ spring:
     init:
       mode: always
       schema-locations: classpath:schema.sql
-    #  data-locations: classpath:data.sql
-      encoding: UTF-8   # ✅ Añade esta línea
+      encoding: UTF-8
   h2:
     console:
       enabled: true
@@ -18,16 +17,27 @@ spring:
   web:
     locale: es
     encoding:
-      charset: UTF-8   # ✅ Fuerza UTF-8 en respuestas
+      charset: UTF-8
       enabled: true
+
+  webflux:
+    static-path-pattern: /swagger-ui/**
 
 logging:
   level:
     root: warn
     org.springframework.web: debug
     org.springframework.security: debug
+    org.springframework.boot: DEBUG
+    com.bci.smart: DEBUG
     org.hibernate.SQL: debug
 
 jwt:
   secret: Q2hC+GvzK3oB9Nn5S5XId6VJbhvH3KJ4FhRqK7/lTlc=
-  expiration: 86400 # 1 día en segundos
+  expiration: 86400
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui/

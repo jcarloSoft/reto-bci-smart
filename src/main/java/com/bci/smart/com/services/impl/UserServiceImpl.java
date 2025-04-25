@@ -3,7 +3,7 @@ package com.bci.smart.com.services.impl;
 import com.bci.smart.com.dto.UserResponseDTO;
 import com.bci.smart.com.dto.UsersDTO;
 import com.bci.smart.com.exception.UserAlreadyExistsException;
-import com.bci.smart.com.handler.UserMapper;
+import com.bci.smart.com.controller.UserMapper;
 import com.bci.smart.com.model.Phone;
 import com.bci.smart.com.model.Users;
 import com.bci.smart.com.repository.PhoneRepository;
@@ -29,11 +29,14 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public Mono<UserResponseDTO> createUser(UsersDTO userDTO) {
-    return userRepository.findByEmail(userDTO.getEmail()) // Verificar si el email ya está registrado
-        .flatMap(existingUser -> {
-          // Si existe, lanzar la excepción personalizada y asegurar el tipo con Mono.<UserResponseDTO>error
-          return Mono.<UserResponseDTO>error(new UserAlreadyExistsException("El correo ya está registrado"));
-        })
+    if (userDTO.getEmail() == null || !userDTO.getEmail().contains("@")) {
+      return Mono.<UserResponseDTO>error(new IllegalArgumentException("El correo proporcionado no es válido."));
+    }
+
+    return userRepository.findByEmail(userDTO.getEmail())
+        .flatMap(existingUser ->
+            Mono.<UserResponseDTO>error(new UserAlreadyExistsException("El correo ya está registrado."))
+        )
         .switchIfEmpty(Mono.defer(() -> {
           UUID userId = UUID.randomUUID();
           Users user = userMapper.toEntity(userDTO);
@@ -51,6 +54,8 @@ public class UserServiceImpl implements UserService {
               });
         }));
   }
+
+
 
 
 

@@ -1,0 +1,198 @@
+openapi: 3.0.3
+info:
+  title: BCI Smart User Management API
+  description: |
+    Este proyecto es una **API REST** para la gestión de usuarios y sus teléfonos, desarrollada con **Spring WebFlux**, **Java 17+**, y base de datos **h2**.
+    El proyecto sigue un enfoque reactivo utilizando **Project Reactor**, lo que permite un manejo eficiente de peticiones asíncronas.
+  version: 1.0.0
+  contact:
+    name: Juan Carlos Hilario Ramírez
+    email: juan.perez@mail.com
+    url: https://github.com/juanperez
+  termsOfService: https://www.example.com/terms
+
+servers:
+  - url: https://api.example.com/v1
+    description: API de Producción
+
+paths:
+  /api/users/create:
+    post:
+      summary: Crear un nuevo usuario
+      description: Registra un nuevo usuario en el sistema, generando un JWT para su autenticación.
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Juan Pérez"
+                email:
+                  type: string
+                  example: "juan.perez@mail.com"
+                password:
+                  type: string
+                  example: "Peru123456"
+                phones:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      phoneNumber:
+                        type: string
+                        example: "123456789"
+                      cityCode:
+                        type: string
+                        example: "1"
+                      countryCode:
+                        type: string
+                        example: "57"
+      responses:
+        '201':
+          description: Usuario creado con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    example: "98415242-074d-4e42-a96b-0e086fbc3c7b"
+                  created:
+                    type: string
+                    format: date-time
+                    example: "2025-04-14T12:00:00"
+                  modified:
+                    type: string
+                    format: date-time
+                    example: "2025-04-14T12:00:00"
+                  lastLogin:
+                    type: string
+                    format: date-time
+                    example: "2025-04-14T12:00:00"
+                  token:
+                    type: string
+                    example: "jwt-token-generado"
+                  isActive:
+                    type: boolean
+                    example: true
+                  name:
+                    type: string
+                    example: "Juan Pérez"
+                  email:
+                    type: string
+                    example: "juan.perez@mail.com"
+                  phones:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        phoneNumber:
+                          type: string
+                          example: "123456789"
+                        cityCode:
+                          type: string
+                          example: "1"
+                        countryCode:
+                          type: string
+                          example: "57"
+   
+
+  /api/users:
+    get:
+      summary: Obtener todos los usuarios
+      description: Devuelve la lista de todos los usuarios registrados en el sistema.
+      operationId: getAllUsers
+      responses:
+        '200':
+          description: Lista de usuarios
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      format: uuid
+                      example: "98415242-074d-4e42-a96b-0e086fbc3c7b"
+                    created:
+                      type: string
+                      format: date-time
+                      example: "2025-04-14T12:00:00"
+                    modified:
+                      type: string
+                      format: date-time
+                      example: "2025-04-14T12:00:00"
+                    lastLogin:
+                      type: string
+                      format: date-time
+                      example: "2025-04-14T12:00:00"
+                    token:
+                      type: string
+                      example: "jwt-token-generado"
+                    isActive:
+                      type: boolean
+                      example: true
+                    name:
+                      type: string
+                      example: "Juan Pérez"
+                    email:
+                      type: string
+                      example: "juan.perez@mail.com"
+                    phones:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          phoneNumber:
+                            type: string
+                            example: "123456789"
+                          cityCode:
+                            type: string
+                            example: "1"
+                          countryCode:
+                            type: string
+                            example: "57"
+
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        phones:
+          type: array
+          items:
+            type: object
+            properties:
+              phoneNumber:
+                type: string
+              cityCode:
+                type: string
+              countryCode:
+                type: string
+    Phone:
+      type: object
+      properties:
+        phoneNumber:
+          type: string
+        cityCode:
+          type: string
+        countryCode:
+          type: string
